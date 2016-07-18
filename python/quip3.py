@@ -640,7 +640,7 @@ class QuipClient(object):
         if post_data:
             post_data = dict((k, v) for k, v in list(post_data.items())
                              if v or isinstance(v, int))
-            request.data = urllib.parse.urlencode(self._clean(**post_data))
+            request.data = urllib.parse.urlencode(self._clean(**post_data)).encode("utf8")
         if self.access_token:
             request.add_header("Authorization", "Bearer " + self.access_token)
         try:
@@ -666,7 +666,7 @@ class QuipClient(object):
     def _clean(self, **args):
         # We only expect ints or strings, but on Windows ints can become longs
         return dict((k, str(v) if isinstance(
-            v, (int, float, complex)) else v.encode("utf-8"))
+            v, (int, float, complex)) else v.encode("utf8"))
                     for k, v in list(args.items()) if v or isinstance(
                             v, (int, float, complex)))
 
